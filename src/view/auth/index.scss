@@ -1,0 +1,17 @@
+.auth {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  // background: #101214;
+
+  .app-title {
+    padding: 25px 200px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    background: #00b8a9;
+    border-radius: 10px;
+  }
+}

@@ -1,3 +1,20 @@
-.index {
+@use '@/assets/style/common.module.scss' as *;
 
+.index {
+  background: $blank-white;
+
+  .menu-wrapper {
+    min-height: 600px;
+  }
+
+  .header {
+    position: static;
+    height: 64px;
+    justify-content: center;
+  }
+
+  .main-content {
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
 }

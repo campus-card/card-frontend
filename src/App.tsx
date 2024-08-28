@@ -1,12 +1,15 @@
-import css from '@/assets/style/common.module.scss'
-import Index from '@/view/index'
+import { useRoutes } from 'react-router-dom'
+import { routes } from '@/route'
+import { Suspense } from 'react'
 
 export default function App() {
-  console.log('cssModule = ', css)
+  const routerView = useRoutes(routes)
 
   return (
     <div className='app'>
-      <Index />
+      <Suspense>
+        {routerView}
+      </Suspense>
     </div>
   )
 }

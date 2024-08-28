@@ -7,8 +7,10 @@
   lg, large: 1200px
   xl, extra-large: 1536px
 */
-$num: 10;
 
-:export {
-  number: $num;
+// 背景白色. 不用纯白
+$blank-white: #eee;
+
+html {
+  background: $blank-white;
 }
