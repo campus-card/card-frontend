@@ -5,6 +5,7 @@ import { lazy } from 'react'
 export const routes: RouteObject[] = [
   /* 重定向 */
   { path: '/', element: <Navigate to='/auth/login'/> },
+  { path: '/auth', element: <Navigate to='/auth/login'/> },
   { path: '/index', element: <Navigate to='/index/home'/> },
   /* 路由表 */
   {

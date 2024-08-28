@@ -25,25 +25,29 @@ const menuItems = [
 ]
 
 export default function Index() {
+  // 点击header头像弹出菜单的挂载点
   // useRef只有当泛型参数包含null时, 返回的才是不可修改的RefObject. 否则为可修改的MutableRefObject, 类型不一样
   const anchorRef = useRef<HTMLButtonElement | null>(null)
   // 是否打卡header头像下拉菜单
   const [open, setOpen] = useState<boolean>(false)
 
-  // 是否打开左侧菜单
+  // 是否打开左侧导航菜单
   const [openMenu, setOpenMenu] = useState<boolean>(true)
   // 当前选中的菜单项
-  const [selectedIndex, setSelectedIndex] = useState<number>(1)
+  const [selectedItem, setSelectedItem] = useState(menuItems[0])
   // 刷新(初始渲染)时根据当前路由设置选中的菜单项
   useEffect(() => {
     const item = menuItems.find(item => window.location.pathname.includes(item.key))
     if (item) {
-      setSelectedIndex(item.index)
+      setSelectedItem(item)
     }
   }, [])
   const navigate = useNavigate()
   const selectItem = (index: number, path: string) => {
-    setSelectedIndex(index)
+    const item = menuItems.find(item => item.index === index)
+    if (item) {
+      setSelectedItem(item)
+    }
     navigate(path)
   }
 
@@ -58,11 +62,11 @@ export default function Index() {
       <Grid2 container columns={24}>
         {/* 左侧菜单导航栏
          ClickAwayListener用于实现点击外侧时关闭菜单; Slide为移入的动画组件 */}
-        <ClickAwayListener onClickAway={() => isSmallScreen && openMenu && setOpenMenu(false)}>
+        <ClickAwayListener onClickAway={() => isSmallScreen && setOpenMenu(false)}>
           <Slide direction={'right'} in={openMenu} style={{ position: isSmallScreen ? 'absolute' : 'initial' }}>
-            <Grid2 size={4}>
+            <Grid2 size={isSmallScreen ? 12 : 4}>
               <Paper className={'menu-wrapper'}>
-                <List subheader={<ListSubheader>校园卡管理系统</ListSubheader>}>
+                <List subheader={<ListSubheader style={{fontSize: '20px', fontWeight: 'bold'}}>校园卡管理系统</ListSubheader>}>
                   {menuItems.map(item => {
                     if (item.index === 0) {
                       return <Divider key={item.index} sx={{ color: '#919191' }} textAlign={'left'}>{item.label}</Divider>
@@ -71,7 +75,7 @@ export default function Index() {
                         <ListItemButton
                           key={item.index}
                           onClick={_e => selectItem(item.index, item.key)}
-                          selected={selectedIndex === item.index}
+                          selected={selectedItem.index === item.index}
                         >
                           <ListItemIcon>{item.icon && <item.icon/>}</ListItemIcon>
                           <ListItemText primary={item.label}/>
@@ -103,7 +107,7 @@ export default function Index() {
               >
                 <MenuIcon fontSize={'large'}/>
               </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>主页</Typography>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>{selectedItem.label}</Typography>
               <IconButton
                 size="large"
                 onClick={() => setOpen(true)}
@@ -121,10 +125,10 @@ export default function Index() {
                 open={open}
                 onClose={() => setOpen(false)}
               >
-                <MenuItem>
+                <MenuItem onClick={() => selectItem(3, '/index/userinfo')}>
                   <ListItemIcon><AccountBox fontSize={'small'}/></ListItemIcon>用户信息
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => navigate('/auth')}>
                   <ListItemIcon><Logout fontSize={'small'}/></ListItemIcon>退出登录
                 </MenuItem>
               </Menu>
