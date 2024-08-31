@@ -1,15 +1,4 @@
 /**
- * 登录信息
- */
-export type LoginData = {
-  id: number,
-  username: string,
-  role: UserRole,
-  token: string,
-  refreshToken: string
-}
-
-/**
  * 用户
  */
 export type User = {

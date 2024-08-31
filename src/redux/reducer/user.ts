@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LoginData, User } from '@/type/User.ts'
+import { User } from '@/type/User.ts'
 import { createAppSelector } from '@/redux/typing.ts'
+import { LoginData } from '@/type/Api.ts'
 
 // slice是reducer和action-creator的结合. 便于根据业务流程划分reducer
 const userSlice = createSlice({
@@ -12,9 +13,7 @@ const userSlice = createSlice({
       role: 1,
       registerTime: ''
     } as User,
-    loginData: {
-      token: '12345'
-    } as LoginData
+    loginData: {} as LoginData
   },
   reducers: {
     setUserinfo: (state, action: PayloadAction<User>) => {
@@ -28,6 +27,10 @@ const userSlice = createSlice({
     },
     setRefreshToken: (state, action: PayloadAction<string>) => {
       state.loginData.refreshToken = action.payload
+    },
+    logout: (state) => {
+      state.loginData = {} as LoginData
+      state.userinfo = {} as User
     }
   },
   // selectors可看做计算属性
@@ -39,7 +42,7 @@ const userSlice = createSlice({
     // 并能缓存计算结果
     // https://www.reduxjs.cn/usage/deriving-data-selectors/#createselector-%E6%A6%82%E8%BF%B0
     roleLabel: createAppSelector(
-      // inputSelectors, 可以有多个
+      // inputSelectors, 可以有多个(数组)
       state => state.userinfo.role,
       // result/outputSelector
       role => {
@@ -56,6 +59,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setUserinfo, setLoginData, setToken, setRefreshToken  } = userSlice.actions
+export const { setUserinfo, setLoginData, setToken, setRefreshToken, logout } = userSlice.actions
 export const { token, refreshToken, roleLabel } = userSlice.selectors
 export default userSlice.reducer

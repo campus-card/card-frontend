@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import store, { persistor } from '@/redux'
+import { SnackbarProvider } from 'notistack'
 
 createRoot(document.getElementById('root')!).render(
   // todo: 构建时移除StrictMode
@@ -17,9 +18,12 @@ createRoot(document.getElementById('root')!).render(
     <CssBaseline />
     <BrowserRouter>
       <Provider store={store}>
-        {/* PersistGate配置持久化 */}
+        {/* @ts-ignore PersistGate配置持久化 */}
         <PersistGate persistor={persistor} loading={<span>加载中...</span>}>
-          <App />
+          {/* 弹窗(notistack)的provider. 默认设为顶部居中 */}
+          <SnackbarProvider anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+            <App />
+          </SnackbarProvider>
         </PersistGate>
       </Provider>
     </BrowserRouter>
