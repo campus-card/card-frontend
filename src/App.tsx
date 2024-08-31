@@ -6,10 +6,8 @@ export default function App() {
   const routerView = useRoutes(routes)
 
   return (
-    <div className='app'>
-      <Suspense>
-        {routerView}
-      </Suspense>
-    </div>
+    <Suspense>
+      {routerView}
+    </Suspense>
   )
 }

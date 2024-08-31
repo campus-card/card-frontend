@@ -1,5 +1,6 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { LoginData, User } from '@/type/User.ts'
+import { createAppSelector } from '@/redux/typing.ts'
 
 // slice是reducer和action-creator的结合. 便于根据业务流程划分reducer
 const userSlice = createSlice({
@@ -37,7 +38,7 @@ const userSlice = createSlice({
     // 使用createSelector可以进行更复杂的操作, 比如根据多个inputSelector的结果进行计算
     // 并能缓存计算结果
     // https://www.reduxjs.cn/usage/deriving-data-selectors/#createselector-%E6%A6%82%E8%BF%B0
-    roleLabel: createSelector(
+    roleLabel: createAppSelector(
       // inputSelectors, 可以有多个
       state => state.userinfo.role,
       // result/outputSelector
