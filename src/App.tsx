@@ -1,13 +1,11 @@
-import { useRoutes } from 'react-router-dom'
-import { routes } from '@/route'
 import { Suspense } from 'react'
+import { RouterProvider } from 'react-router-dom'
+import { router } from '@/route'
 
 export default function App() {
-  const routerView = useRoutes(routes)
-
   return (
     <Suspense>
-      {routerView}
+      <RouterProvider router={router} />
     </Suspense>
   )
 }

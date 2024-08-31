@@ -1,8 +1,13 @@
-import { Navigate, RouteObject } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy } from 'react'
 
+/*
+* react-router新版用法, 通过createBrowserRouter创建路由表
+* 使用<RouterProvider router={router} />作为路由出口, 而不是useRoutes
+* 导出的router对象可以在组件之外使用, 用于路由跳转
+*  */
 // todo: keep-alive效果. 目前react不支持, 计划引入react-activation库
-export const routes: RouteObject[] = [
+export const router = createBrowserRouter([
   /* 重定向 */
   { path: '/', element: <Navigate to='/auth/login'/> },
   { path: '/auth', element: <Navigate to='/auth/login'/> },
@@ -21,13 +26,11 @@ export const routes: RouteObject[] = [
     path: '/index',
     Component: lazy(() => import('@/view/index')),
     children: [
-      {
-        path: 'home',
-        Component: lazy(() => import('@/view/home'))
-      },
+      { path: 'home', Component: lazy(() => import('@/view/home')) },
       { path: 'card', Component: lazy(() => import('@/view/card')) },
+      { path: 'shop', Component: lazy(() => import('@/view/shop')) },
       { path: 'userinfo', Component: lazy(() => import('@/view/userinfo')) },
       { path: 'setting', Component: lazy(() => import('@/view/setting')) }
     ]
   }
-]
+])

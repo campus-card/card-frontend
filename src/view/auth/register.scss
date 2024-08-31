@@ -1,10 +1,6 @@
-.register {
+// note: react引入外部css时极易造成类名冲突, 顶级类名加个-page后缀
+.register-page {
   padding: 0 250px;
-
-  .title {
-    font-size: 24px;
-    font-weight: bold;
-  }
 
   .input {
     width: 100%;

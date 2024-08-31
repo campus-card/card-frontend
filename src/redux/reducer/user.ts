@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { User } from '@/type/User.ts'
 import { createAppSelector } from '@/redux/typing.ts'
 import { LoginData } from '@/type/Api.ts'
+import { router } from '@/route'
 
 // slice是reducer和action-creator的结合. 便于根据业务流程划分reducer
 const userSlice = createSlice({
@@ -31,6 +32,9 @@ const userSlice = createSlice({
     logout: (state) => {
       state.loginData = {} as LoginData
       state.userinfo = {} as User
+      // 登出之后直接刷新
+      router.navigate('/auth')
+        .then(() => location.reload())
     }
   },
   // selectors可看做计算属性

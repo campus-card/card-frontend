@@ -23,7 +23,7 @@ export default function Login() {
     const res = await apiLogin(username, password, role)
     if (res.code === 200) {
       dispatch(setLoginData(res.data))
-      enqueueSnackbar('登录成功', { variant: 'success'})
+      enqueueSnackbar(`欢迎回来, ${res.data.username}`, { variant: 'success'})
       navigate('/index')
     } else {
       console.warn('登录失败:', res)
@@ -48,7 +48,6 @@ export default function Login() {
             value={username}
             onChange={e => setUsername(e.target.value)}
             className='input'
-            variant='outlined'
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><AccountCircle/></InputAdornment>}}}
             label='用户名'
           />
@@ -59,7 +58,6 @@ export default function Login() {
             onChange={e => setPassword(e.target.value)}
             className='input'
             type={'password'}
-            variant='outlined'
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><LockOutlined/></InputAdornment>}}}
             label='密码'
           />

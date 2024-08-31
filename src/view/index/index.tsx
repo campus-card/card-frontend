@@ -1,30 +1,65 @@
 import '@/view/index/index.scss'
 import {
-  AppBar, Box, ClickAwayListener, Divider,
+  AppBar,
+  Box,
+  ClickAwayListener, Container,
+  Divider,
   Grid2,
-  IconButton, List, ListItemButton,
-  ListItemIcon, ListItemText, ListSubheader,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
   Menu,
-  MenuItem, Paper, Slide,
+  MenuItem,
+  Paper,
+  Slide,
   Toolbar,
-  Typography, useMediaQuery, useTheme
+  Typography,
+  useMediaQuery,
+  useTheme
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { AccountBox, AccountCircle, CreditCard, Home, Logout, Settings } from '@mui/icons-material'
+import {
+  AccountBox,
+  AccountCircle,
+  CreditCard,
+  Home,
+  LocalShippingOutlined,
+  Logout,
+  Settings
+} from '@mui/icons-material'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '@/redux/typing.ts'
+import { logout } from '@/redux/reducer/user.ts'
+import store from '@/redux'
+import { UserRole } from '@/type/User.ts'
+import { LoginData } from '@/type/Api.ts'
 
-// 菜单项
-const menuItems = [
+// 菜单项, 静态的内容就不写在组件里面了
+// 不同类型用户的菜单项不同
+const role: UserRole = store.getState().user.loginData.role
+const menuItems = role === UserRole.Student ? [
   { index: 1, key: '/index/home', label: '主页', icon: Home },
   // index为0表示分割线
   { index: 0, key: '我的', label: '我的', icon: null },
   { index: 2, key: '/index/card', label: '校园卡管理', icon: CreditCard },
   { index: 3, key: '/index/userinfo', label: '用户信息', icon: AccountBox },
   { index: 4, key: '/index/setting', label: '设置', icon: Settings }
-]
+] : role === UserRole.Shop ? [
+  { index: 1, key: '/index/home', label: '主页', icon: Home },
+  { index: 2, key: '/index/shop', label: '商品管理', icon: LocalShippingOutlined },
+  { index: 3, key: '/index/userinfo', label: '用户信息', icon: AccountBox },
+  { index: 4, key: '/index/setting', label: '设置', icon: Settings }
+] : []
 
 export default function Index() {
+  const dispatch = useAppDispatch()
+  const loginData = useAppSelector<LoginData>(state => state.user.loginData)
+  const navigate = useNavigate()
+
   // 点击header头像弹出菜单的挂载点
   // useRef只有当泛型参数包含null时, 返回的才是不可修改的RefObject. 否则为可修改的MutableRefObject, 类型不一样
   const anchorRef = useRef<HTMLButtonElement | null>(null)
@@ -42,7 +77,7 @@ export default function Index() {
       setSelectedItem(item)
     }
   }, [])
-  const navigate = useNavigate()
+
   const selectItem = (index: number, path: string) => {
     const item = menuItems.find(item => item.index === index)
     if (item) {
@@ -73,7 +108,7 @@ export default function Index() {
                     } else {
                       return (
                         <ListItemButton
-                          key={item.index}
+                          key={item.key}
                           onClick={_e => selectItem(item.index, item.key)}
                           selected={selectedItem.index === item.index}
                         >
@@ -110,7 +145,7 @@ export default function Index() {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>{selectedItem.label}</Typography>
               <IconButton
                 size="large"
-                onClick={() => setOpen(true)}
+                onMouseEnter={() => setOpen(true)}
                 ref={anchorRef}
                 color="inherit"
               >
@@ -125,10 +160,11 @@ export default function Index() {
                 open={open}
                 onClose={() => setOpen(false)}
               >
+                <Container><Paper style={{ fontWeight: 'bolder', textAlign: 'center', fontSize: '22px' }}>{loginData.username}</Paper></Container>
                 <MenuItem onClick={() => selectItem(3, '/index/userinfo')}>
                   <ListItemIcon><AccountBox fontSize={'small'}/></ListItemIcon>用户信息
                 </MenuItem>
-                <MenuItem onClick={() => navigate('/auth')}>
+                <MenuItem onClick={() => dispatch(logout())}>
                   <ListItemIcon><Logout fontSize={'small'}/></ListItemIcon>退出登录
                 </MenuItem>
               </Menu>

@@ -4,5 +4,5 @@
 
 ## todo
 
-- 能用memo, usecallback的地方都用一下
+- 能用memo, useCallback的地方都用一下, 比如绑定的事件处理匿名箭头函数等等
 - 引入autoprefixer
