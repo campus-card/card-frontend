@@ -1,0 +1,17 @@
+.shop {
+  .header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px 0 20px;
+  }
+
+  .content {
+    padding: 15px 5px;
+  }
+
+  .pagination {
+    margin-top: 15px;
+    padding: 5px 10px;
+  }
+}

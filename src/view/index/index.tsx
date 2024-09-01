@@ -30,13 +30,16 @@ import {
   Logout,
   Settings
 } from '@mui/icons-material'
-import { Suspense, useEffect, useRef, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation, useNavigate, useOutlet } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/redux/typing.ts'
-import { logout } from '@/redux/reducer/user.ts'
+import { logout, setUserinfo } from '@/redux/reducer/user.ts'
 import store from '@/redux'
-import { UserRole } from '@/type/User.ts'
-import { LoginData } from '@/type/Api.ts'
+import { User, UserRole } from '@/type/User.ts'
+import { apiGetUserInfo } from '@/api/user.ts'
+import Toast from '@/util/Toast.ts'
+import { Placeholder } from '@/util/placeholder.ts'
+import KeepAlive from 'keepalive-for-react'
 
 // 菜单项, 静态的内容就不写在组件里面了
 // 不同类型用户的菜单项不同
@@ -57,8 +60,10 @@ const menuItems = role === UserRole.Student ? [
 
 export default function Index() {
   const dispatch = useAppDispatch()
-  const loginData = useAppSelector<LoginData>(state => state.user.loginData)
   const navigate = useNavigate()
+
+  // 当前登录的用户信息
+  const userinfo = useAppSelector<User>(state => state.user.userinfo)
 
   // 点击header头像弹出菜单的挂载点
   // useRef只有当泛型参数包含null时, 返回的才是不可修改的RefObject. 否则为可修改的MutableRefObject, 类型不一样
@@ -70,12 +75,24 @@ export default function Index() {
   const [openMenu, setOpenMenu] = useState<boolean>(true)
   // 当前选中的菜单项
   const [selectedItem, setSelectedItem] = useState(menuItems[0])
-  // 刷新(初始渲染)时根据当前路由设置选中的菜单项
+  // onCreated
   useEffect(() => {
+    // 刷新(初始渲染)时根据当前路由设置选中的菜单项
     const item = menuItems.find(item => window.location.pathname.includes(item.key))
     if (item) {
       setSelectedItem(item)
     }
+    // 初始加载时获取用户信息
+    (async () => {
+      const res = await apiGetUserInfo()
+      if (res.code === 200) {
+        dispatch(setUserinfo(res.data))
+      } else {
+        Toast.error(res.message)
+        console.warn('获取用户信息失败', res)
+        dispatch(setUserinfo(Placeholder.User()))
+      }
+    })()
   }, [])
 
   const selectItem = (index: number, path: string) => {
@@ -86,11 +103,19 @@ export default function Index() {
     navigate(path)
   }
 
-  // 媒体查询, 当屏幕宽度小于600px时, 菜单栏收起
+  // 媒体查询, 当屏幕宽度小于1100px时, 左侧菜单栏收起
   const isSmallScreen: boolean = useMediaQuery(useTheme().breakpoints.down(1100))
   useEffect(() => {
     setOpenMenu(!isSmallScreen)
   }, [isSmallScreen])
+
+  // 使用了keep-alive之后, outlet需要切换为hook形式, 不能直接使用<Outlet/>
+  const outlet = useOutlet()
+  // 用于keep-alive路由缓存的key
+  const location = useLocation()
+  const cacheKey = useMemo(() => {
+    return location.pathname + location.search
+  }, [location])
 
   return (
     <div className="index">
@@ -108,6 +133,7 @@ export default function Index() {
                     } else {
                       return (
                         <ListItemButton
+                          divider
                           key={item.key}
                           onClick={_e => selectItem(item.index, item.key)}
                           selected={selectedItem.index === item.index}
@@ -160,7 +186,7 @@ export default function Index() {
                 open={open}
                 onClose={() => setOpen(false)}
               >
-                <Container><Paper style={{ fontWeight: 'bolder', textAlign: 'center', fontSize: '22px' }}>{loginData.username}</Paper></Container>
+                <Container><Paper style={{ fontWeight: 'bolder', textAlign: 'center', fontSize: '22px' }}>{userinfo.username}</Paper></Container>
                 <MenuItem onClick={() => selectItem(3, '/index/userinfo')}>
                   <ListItemIcon><AccountBox fontSize={'small'}/></ListItemIcon>用户信息
                 </MenuItem>
@@ -172,10 +198,12 @@ export default function Index() {
           </AppBar>
           {/* 右侧下方主体部分 */}
           <Box className={'main-content'} component={'main'}>
-            {/* 懒加载的路由别忘了加上Suspense */}
-            <Suspense>
-              <Outlet/>
-            </Suspense>
+            <KeepAlive activeName={cacheKey} max={10} strategy={'LRU'}>
+              {/* 懒加载的路由别忘了加上Suspense */}
+              <Suspense>
+                {outlet}
+              </Suspense>
+            </KeepAlive>
           </Box>
         </Grid2>
       </Grid2>

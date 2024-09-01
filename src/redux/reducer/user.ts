@@ -8,26 +8,19 @@ import { router } from '@/route'
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    userinfo: {
-      id: 0,
-      username: 'reisen',
-      role: 1,
-      registerTime: ''
-    } as User,
+    userinfo: {} as User,
     loginData: {} as LoginData
   },
   reducers: {
-    setUserinfo: (state, action: PayloadAction<User>) => {
-      state.userinfo = action.payload
+    setUserinfo: (state, action: PayloadAction<Partial<User>>) => {
+      // 支持部分更新/删除. 删除时payload对应字段设为undefined
+      state.userinfo = { ...state.userinfo, ...action.payload }
     },
-    setLoginData(state, action: PayloadAction<LoginData>) {
-      state.loginData = action.payload
+    setLoginData(state, action: PayloadAction<Partial<LoginData>>) {
+      state.loginData = { ...state.loginData, ...action.payload }
     },
-    setToken(state, action: PayloadAction<string>) {
-      state.loginData.token = action.payload
-    },
-    setRefreshToken: (state, action: PayloadAction<string>) => {
-      state.loginData.refreshToken = action.payload
+    clearLoginData: (state) => {
+      state.loginData = {} as LoginData
     },
     logout: (state) => {
       state.loginData = {} as LoginData
@@ -63,6 +56,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setUserinfo, setLoginData, setToken, setRefreshToken, logout } = userSlice.actions
+export const { setUserinfo, setLoginData, clearLoginData, logout } = userSlice.actions
 export const { token, refreshToken, roleLabel } = userSlice.selectors
 export default userSlice.reducer

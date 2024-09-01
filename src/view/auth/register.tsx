@@ -2,14 +2,13 @@ import '@/view/auth/register.scss'
 import { Box, Button, FormControlLabel, Grid2, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { AccountCircle, Lock, LockOutlined } from '@mui/icons-material'
-import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { UserRole } from '@/type/User.ts'
 import { apiRegister } from '@/api/auth.ts'
+import Toast from '@/util/Toast.ts'
 
 export default function Register() {
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
 
   /* 表单 */
   const [username, setUsername] = useState<string>('')
@@ -19,19 +18,24 @@ export default function Register() {
   /* 校验 */
   const validate = () => {
     if (!username || !password || !confirmPassword) {
-      enqueueSnackbar('输入不能有空', { variant: 'error' })
+      Toast.error('输入不能为空')
+      return false
+    }
+    // 检测空格
+    if (/\s/.test(username + password + confirmPassword)) {
+      Toast.error('输入不能包含空格')
       return false
     }
     if (username.length < 4 || username.length > 30) {
-      enqueueSnackbar('用户名长度应在4-30之间', { variant: 'error' })
+      Toast.error('用户名长度应在4-30之间')
       return false
     }
     if (password.length < 6) {
-      enqueueSnackbar('密码长度应不小于6', { variant: 'error' })
+      Toast.error('密码长度不应小于6')
       return false
     }
     if (password !== confirmPassword) {
-      enqueueSnackbar('两次密码不一致', { variant: 'error' })
+      Toast.error('两次密码不一致')
       return false
     }
     return true
@@ -41,11 +45,11 @@ export default function Register() {
     if (!validate()) return
     const res = await apiRegister(username, password, role)
     if (res.code === 200) {
-      enqueueSnackbar('注册成功', { variant: 'success' })
+      Toast.success('注册成功')
       navigate('/auth/login')
     } else {
       console.warn('注册失败:', res)
-      enqueueSnackbar(res.message, { variant: 'error' })
+      Toast.error(res.message)
     }
   }
 
@@ -66,8 +70,7 @@ export default function Register() {
             className='input'
             variant='filled'
             value={username}
-            // 不允许输入空格
-            onChange={e => (e.nativeEvent as InputEvent).data?.trim() && setUsername(e.target.value)}
+            onChange={e => setUsername(e.target.value)}
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><AccountCircle/></InputAdornment>}}}
             label='用户名'
           />
@@ -77,7 +80,7 @@ export default function Register() {
             className='input'
             variant='filled'
             value={password}
-            onChange={e => (e.nativeEvent as InputEvent).data?.trim() && setPassword(e.target.value) }
+            onChange={e => setPassword(e.target.value)}
             type={'password'}
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><LockOutlined/></InputAdornment>}}}
             label='密码'
@@ -88,7 +91,7 @@ export default function Register() {
             className='input'
             variant='filled'
             value={confirmPassword}
-            onChange={e => (e.nativeEvent as InputEvent).data?.trim() && setConfirmPassword(e.target.value)}
+            onChange={e => setConfirmPassword(e.target.value)}
             type={'password'}
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><Lock/></InputAdornment>}}}
             label='确认密码'

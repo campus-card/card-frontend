@@ -1,17 +1,16 @@
 import { Box, Button, FormControlLabel, Grid2, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
 import '@/view/auth/login.scss'
 import { useNavigate } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { UserRole } from '@/type/User.ts'
 import { apiLogin } from '@/api/auth.ts'
 import { useAppDispatch } from '@/redux/typing.ts'
 import { setLoginData } from '@/redux/reducer/user.ts'
 import { AccountCircle, LockOutlined } from '@mui/icons-material'
+import Toast from '@/util/Toast.ts'
 
 export default function Login() {
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
 
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -23,11 +22,11 @@ export default function Login() {
     const res = await apiLogin(username, password, role)
     if (res.code === 200) {
       dispatch(setLoginData(res.data))
-      enqueueSnackbar(`欢迎回来, ${res.data.username}`, { variant: 'success'})
+      Toast.success(`欢迎回来, ${res.data.username}`)
       navigate('/index')
     } else {
       console.warn('登录失败:', res)
-      enqueueSnackbar(res.message, { variant: 'error' })
+      Toast.error(res.message)
     }
   }
 
