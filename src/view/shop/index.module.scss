@@ -4,6 +4,7 @@
     justify-content: flex-start;
     align-items: center;
     margin: 10px 0 20px;
+    padding: 5px 10px;
   }
 
   .content {
@@ -13,5 +14,10 @@
   .pagination {
     margin-top: 15px;
     padding: 5px 10px;
+
+    /* 样式穿透. 在css-module下不会提升为真正的全局样式 */
+    :global(.MuiPagination-ul) {
+      justify-content: flex-end;
+    }
   }
 }

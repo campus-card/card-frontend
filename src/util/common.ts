@@ -17,3 +17,11 @@ export const spliceWithPlaceholder = <T>(arr: T[], start: number, deleteCount: n
     arr.splice(start + elements.length, 0, ...new Array(deleteCount - elements.length).fill(undefined))
   }
 }
+
+/**
+ * 格式化日期为yyyy-MM-dd HH:mm:ss <br>
+ * 两位数补0
+ */
+export function formatDate(date: Date): string {
+  return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`
+}

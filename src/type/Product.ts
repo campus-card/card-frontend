@@ -6,6 +6,7 @@ export type Product = {
   description: string,
   price: number,
   store: number,
+  sales: number,
   uploadTime: string,
   modifyTime: string,
 }
