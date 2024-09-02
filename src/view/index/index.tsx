@@ -1,4 +1,4 @@
-import '@/view/index/index.scss'
+import style from '@/view/index/index.module.scss'
 import {
   AppBar,
   Box,
@@ -118,14 +118,14 @@ export default function Index() {
   }, [location])
 
   return (
-    <div className="index">
+    <Box className={style.index} sx={{ bgcolor: 'background.default' }}>
       <Grid2 container columns={24}>
         {/* 左侧菜单导航栏
          ClickAwayListener用于实现点击外侧时关闭菜单; Slide为移入的动画组件 */}
         <ClickAwayListener onClickAway={() => isSmallScreen && setOpenMenu(false)}>
           <Slide direction={'right'} in={openMenu} style={{ position: isSmallScreen ? 'absolute' : 'initial' }}>
             <Grid2 size={isSmallScreen ? 12 : 4}>
-              <Paper className={'menu-wrapper'}>
+              <Paper className={style.menuWrapper}>
                 <List subheader={<ListSubheader style={{fontSize: '20px', fontWeight: 'bold'}}>校园卡管理系统</ListSubheader>}>
                   {menuItems.map(item => {
                     if (item.index === 0) {
@@ -152,7 +152,7 @@ export default function Index() {
         {/* 右侧内容 */}
         <Grid2 size={isSmallScreen ? 24 : 20}>
           {/* 右侧顶部header */}
-          <AppBar className={'header'}>
+          <AppBar className={style.header}>
             <Toolbar>
               <IconButton
                 size="large"
@@ -197,7 +197,7 @@ export default function Index() {
             </Toolbar>
           </AppBar>
           {/* 右侧下方主体部分 */}
-          <Box className={'main-content'} component={'main'}>
+          <Box className={style.mainContent} component={'main'}>
             <KeepAlive activeName={cacheKey} max={10} strategy={'LRU'}>
               {/* 懒加载的路由别忘了加上Suspense */}
               <Suspense>
@@ -207,6 +207,6 @@ export default function Index() {
           </Box>
         </Grid2>
       </Grid2>
-    </div>
+    </Box>
   )
 }

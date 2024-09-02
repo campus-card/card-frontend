@@ -57,29 +57,25 @@ export default function Shop() {
   // 删除商品
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const deleteId = useRef<number>(0)
-  const deleteProduct = (id: number) => {
-    apiDeleteProduct(id)
-      .then(res => {
-        if (res.code === 200) {
-          Toast.warning('已删除商品')
-          // 将数据列表中的对应数据删除
-          productListData.current = productListData.current.filter(item => item.id !== id)
-          totalNum.current -= 1
-          // 重新获取当前页的数据
-          apiGetProductList(currentPage, pageSize, productListData.current)
-            .then(pageData => {
-              setProductList(pageData.data)
-              // 重新计算总页数
-              if (totalNum.current % pageSize === 0) {
-                setTotalPage(p => p - 1)
-              }
-              setOpenDeleteModal(false)
-            })
-        } else {
-          Toast.error(res.message)
-          console.warn('删除失败', res)
-        }
-      })
+  const deleteProduct = async (id: number) => {
+    const res = await apiDeleteProduct(id)
+    if (res.code === 200) {
+      Toast.warning('已删除商品')
+      // 将数据列表中的对应数据删除
+      productListData.current = productListData.current.filter(item => item.id !== id)
+      totalNum.current -= 1
+      // 重新获取当前页的数据
+      const pageData = await apiGetProductList(currentPage, pageSize, productListData.current)
+      setProductList(pageData.data)
+      // 重新计算总页数
+      if (totalNum.current % pageSize === 0) {
+        setTotalPage(p => p - 1)
+      }
+      setOpenDeleteModal(false)
+    } else {
+      Toast.error(res.message)
+      console.warn('删除失败', res)
+    }
   }
 
   return (
@@ -159,22 +155,20 @@ export default function Shop() {
  * 新增商品的modal
  */
 const AddProduct = ({open, setOpen, refreshList}: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>>, refreshList: Function }) => {
-  const addProduct = (e: FormEvent<HTMLFormElement>) => {
+  const addProduct = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const data: Partial<Product> = Object.fromEntries(formData.entries())
     if (!validateProduct(data)) return
-    apiAddProduct(data.name!, data.description!, +data.price!, +data.store!)
-      .then(res => {
-        if (res.code === 200) {
-          Toast.success('已上架商品')
-          refreshList()
-          setOpen(false)
-        } else {
-          Toast.error(res.message)
-          console.warn('上架失败', res)
-        }
-      })
+    const res = await apiAddProduct(data.name!, data.description!, +data.price!, +data.store!)
+    if (res.code === 200) {
+      Toast.success('已上架商品')
+      refreshList()
+      setOpen(false)
+    } else {
+      Toast.error(res.message)
+      console.warn('上架失败', res)
+    }
   }
 
   return (
@@ -213,7 +207,7 @@ const ModifyProduct = ({ product, setOpen, open, updateList }: {product: Product
     price: product.price,
     store: product.store
   })
-  const save = () => {
+  const save = async () => {
     if (!validateProduct(form)) return
     // 遍历form, 如果和product中的值不同, 则修改
     const modifiedProps: Partial<Product> = {}
@@ -221,20 +215,19 @@ const ModifyProduct = ({ product, setOpen, open, updateList }: {product: Product
     if (form.description !== product.description) modifiedProps.description = form.description
     if (form.price !== product.price) modifiedProps.price = form.price
     if (form.store !== product.store) modifiedProps.store = form.store
-    apiModifyProduct(product.id, modifiedProps).then(res => {
-      if (res.code === 200) {
-        Toast.success('修改成功')
-        updateList(list => {
-          const index = list.findIndex(item => item.id === product.id)
-          list[index] = { ...list[index], ...modifiedProps, modifyTime: formatDate(new Date()) }
-          return [...list]
-        })
-        setOpen(false)
-      } else {
-        Toast.error(res.message)
-        console.warn('修改失败', res)
-      }
-    })
+    const res = await apiModifyProduct(product.id, modifiedProps)
+    if (res.code === 200) {
+      Toast.success('修改成功')
+      updateList(list => {
+        const index = list.findIndex(item => item.id === product.id)
+        list[index] = { ...list[index], ...modifiedProps, modifyTime: formatDate(new Date()) }
+        return [...list]
+      })
+      setOpen(false)
+    } else {
+      Toast.error(res.message)
+      console.warn('修改失败', res)
+    }
   }
   const cancel = () => {
     console.log('取消修改')
@@ -259,7 +252,7 @@ const ModifyProduct = ({ product, setOpen, open, updateList }: {product: Product
         <TextField label={'商品介绍'} onChange={e => setForm({...form, description: e.target.value})} value={form.description} multiline variant={'standard'} />
         <TextField label={'商品价格'} onChange={e => setForm({...form, price: +e.target.value})} value={form.price} variant={'standard'} type={'number'} />
         <TextField label={'商品库存'} onChange={e => setForm({...form, store: +e.target.value})} value={form.store} variant={'standard'} type={'number'} />
-        <Typography variant={'h6'}>总销售额: {product.sales}</Typography>
+        <Typography variant={'h6'}>总销售量: {product.sales}</Typography>
         <Typography variant={'caption'}>上传时间: {product.uploadTime}</Typography>
         <Typography variant={'caption'}>最近修改时间: {product.modifyTime}</Typography>
         <Stack direction={'row'} spacing={2}>

@@ -16,3 +16,8 @@ export enum UserRole {
   Shop = 2,
   Admin = 3
 }
+export enum UserRoleLabel {
+  Student = '学生',
+  Shop = '商家',
+  Admin = '管理员'
+}

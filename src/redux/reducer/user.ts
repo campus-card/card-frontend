@@ -9,7 +9,8 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     userinfo: {} as User,
-    loginData: {} as LoginData
+    loginData: {} as LoginData,
+    themePreference: 'light' as 'light' | 'dark'
   },
   reducers: {
     setUserinfo: (state, action: PayloadAction<Partial<User>>) => {
@@ -28,6 +29,9 @@ const userSlice = createSlice({
       // 登出之后直接刷新
       router.navigate('/auth')
         .then(() => location.reload())
+    },
+    setThemePreference: (state, action: PayloadAction<'light' | 'dark'>) => {
+      state.themePreference = action.payload
     }
   },
   // selectors可看做计算属性
@@ -56,6 +60,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setUserinfo, setLoginData, clearLoginData, logout } = userSlice.actions
+export const { setUserinfo, setLoginData, clearLoginData, logout, setThemePreference } = userSlice.actions
 export const { token, refreshToken, roleLabel } = userSlice.selectors
 export default userSlice.reducer

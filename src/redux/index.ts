@@ -8,7 +8,7 @@ import { encryptTransform } from 'redux-persist-transform-encrypt'
 const persistConfig = {
   key: 'campus-card',
   storage,
-  whitelist: ['userinfo', 'loginData'],
+  whitelist: ['userinfo', 'loginData', 'themePreference'],
   // 加密存储
   transforms: [
     encryptTransform({
