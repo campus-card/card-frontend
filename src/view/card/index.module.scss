@@ -1,3 +1,9 @@
-.card {
+@use '@/assets/style/common.module.scss' as *;
 
+.card {
+  padding-top: $page-padding-top;
+
+  .cardOverview {
+    padding: 10px 5px;
+  }
 }
