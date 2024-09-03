@@ -1,9 +1,10 @@
-import './index.scss'
+import style from './index.module.scss'
+import { Box, Container } from '@mui/material'
 
 export default function Card() {
   return (
-    <div className={'card'}>
-      <h1>校园卡管理</h1>
-    </div>
+    <Container disableGutters className={style.card}>
+      <Box>校园卡管理</Box>
+    </Container>
   )
 }

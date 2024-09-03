@@ -1,4 +1,4 @@
-import '@/view/auth/register.scss'
+import style from '@/view/auth/register.module.scss'
 import { Box, Button, FormControlLabel, Grid2, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { AccountCircle, Lock, LockOutlined } from '@mui/icons-material'
@@ -54,20 +54,20 @@ export default function Register() {
   }
 
   return (
-    <Box className="register-page">
+    <Box className={style.register}>
       <Grid2 container
              size={12}
              rowSpacing='10px'
       >
         <Grid2 size={12}>
           <RadioGroup row value={role} onChange={(_e, value) => {setRole(+value)}}>
-            <FormControlLabel value={UserRole.Student} control={<Radio />} label="学生注册" />
-            <FormControlLabel value={UserRole.Shop} control={<Radio />} label="商户注册" />
+            <FormControlLabel value={UserRole.Student} control={<Radio />} label={<Box sx={{ color: 'text.primary' }}>学生注册</Box>} />
+            <FormControlLabel value={UserRole.Shop} control={<Radio />} label={<Box sx={{ color: 'text.primary' }}>商户注册</Box>} />
           </RadioGroup>
         </Grid2>
         <Grid2 size={12}>
           <TextField
-            className='input'
+            className={style.input}
             variant='filled'
             value={username}
             onChange={e => setUsername(e.target.value)}
@@ -77,7 +77,7 @@ export default function Register() {
         </Grid2>
         <Grid2 size={12}>
           <TextField
-            className='input'
+            className={style.input}
             variant='filled'
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -88,7 +88,7 @@ export default function Register() {
         </Grid2>
         <Grid2 size={12}>
           <TextField
-            className='input'
+            className={style.input}
             variant='filled'
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
@@ -98,7 +98,7 @@ export default function Register() {
           />
         </Grid2>
         <Grid2 size={12}>
-          <Button className='button' variant='contained' onClick={register}>注册</Button>
+          <Button className={style.button} variant='contained' onClick={register}>注册</Button>
         </Grid2>
       </Grid2>
     </Box>

@@ -1,12 +1,13 @@
-import '@/view/home/index.scss'
-import { Button } from '@mui/material'
+import style from '@/view/home/index.module.scss'
+import { Box, Container } from '@mui/material'
+import { useAppSelector } from '@/redux/typing.ts'
 
 export default function Home() {
+  const userinfo = useAppSelector(state => state.user.userinfo)
 
   return (
-    <div className="home">
-      <h1>主页</h1>
-      <Button variant="contained" color="primary">测试</Button>
-    </div>
+    <Container disableGutters className={style.home}>
+      <Box className={style.welcome} sx={{ color: 'text.primary' }}>欢迎您, {userinfo.username}</Box>
+    </Container>
   )
 }

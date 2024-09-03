@@ -1,0 +1,9 @@
+@use '@/assets/style/common.module.scss' as *;
+
+.home {
+  padding-top: $page-padding-top;
+
+  .welcome {
+    font-size: 40px;
+  }
+}

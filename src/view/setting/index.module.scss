@@ -1,5 +1,7 @@
+@use '@/assets/style/common.module.scss' as *;
+
 .setting {
-  padding-top: 10px;
+  padding-top: $page-padding-top;
 
   .overview {
     padding: 5px 10px;

@@ -1,5 +1,5 @@
 import { Box, Button, FormControlLabel, Grid2, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
-import '@/view/auth/login.scss'
+import style from '@/view/auth/login.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { UserRole } from '@/type/User.ts'
@@ -31,22 +31,23 @@ export default function Login() {
   }
 
   return (
-    <Box className="login">
+    <Box className={style.login}>
       <Grid2 container
              size={12}
              rowSpacing='10px'
       >
         <Grid2 size={12}>
           <RadioGroup row value={role} onChange={(_e, value) => {setRole(+value)}}>
-            <FormControlLabel value={UserRole.Student} control={<Radio />} label="学生登录" />
-            <FormControlLabel value={UserRole.Shop} control={<Radio />} label="商户登录" />
+            {/* label里的内容要用sx属性来跟进一下主题色的样式 */}
+            <FormControlLabel value={UserRole.Student} control={<Radio />} label={<Box sx={{ color: 'text.primary' }}>学生登录</Box>} />
+            <FormControlLabel value={UserRole.Shop} control={<Radio />} label={<Box sx={{ color: 'text.primary' }}>商户登录</Box>} />
           </RadioGroup>
         </Grid2>
         <Grid2 size={12}>
           <TextField
             value={username}
             onChange={e => setUsername(e.target.value)}
-            className='input'
+            className={style.input}
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><AccountCircle/></InputAdornment>}}}
             label='用户名'
           />
@@ -55,7 +56,7 @@ export default function Login() {
           <TextField
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className='input'
+            className={style.input}
             type={'password'}
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><LockOutlined/></InputAdornment>}}}
             label='密码'
@@ -63,13 +64,13 @@ export default function Login() {
         </Grid2>
         <Grid2 container columnSpacing='20px' size={12}>
           <Grid2 size={6}>
-            <Button className='button'
+            <Button className={style.button}
                     variant='contained'
                     onClick={login}
             >登录</Button>
           </Grid2>
           <Grid2 size={6}>
-            <Button className='button register'
+            <Button className={`${style.button} ${style.register}`}
                     variant='contained'
                     onClick={() => navigate('/auth/register')}
             >注册</Button>

@@ -6,7 +6,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
-  Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Pagination,
+  Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid2, Pagination,
   Paper,
   Stack, SwipeableDrawer, TextField,
   Typography
@@ -82,51 +82,53 @@ export default function Shop() {
     <Container disableGutters className={style.shop}>
       <Paper className={style.header}>
         <b>我上架的商品</b>
-        <Button onClick={() => setOpenAddModal(true)} style={{ marginLeft: 'auto' }} variant={'contained'}>上架商品</Button>
+        <Button onClick={() => setOpenAddModal(true)} style={{ marginLeft: 'auto' }} variant={'contained'}>上架新商品</Button>
       </Paper>
       <Paper className={style.content}>
-        <Stack
-          spacing={{ xs: 1, sm: 2 }}
-          direction={'row'}
-          useFlexGap
-          style={{ flexWrap: 'wrap', justifyContent: 'center' }}
+        <Grid2
+          container
+          spacing={2}
+          columns={24}
+          justifyContent={'center'}
         >
           {productList.map(product => {
             return (
-              <Card key={product.id} sx={{ maxWidth: 345, minWidth: 225 }}>
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image="https://picsum.photos/200"
-                  title="图片仅供参考"
-                />
-                <CardContent sx={{ paddingBottom: 0 }}>
-                  <Typography variant="h5" component="div">{product.name}</Typography>
-                  <Typography variant="body2" gutterBottom sx={{ color: 'text.secondary' }}>{ellipsis(product.description, 50)}</Typography>
-                  <Typography variant={'caption'} gutterBottom sx={{ color: 'text.secondary' }}>
-                    <div>上传时间: {product.uploadTime}</div>
-                    <div>修改时间: {product.modifyTime}</div>
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    <Stack direction={'row'} spacing={2}>
-                      <span><ShoppingCart fontSize={'inherit'}/>单价: <CurrencyYen fontSize={ 'inherit' }/>{product.price}</span>
-                      <span><Inventory fontSize={'inherit'}/>库存: {product.store}</span>
-                    </Stack>
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button variant={'contained'} onClick={() => {
-                    setCurrentProduct(product)
-                    setOpenDrawer(true)
-                  }} size="small">修改</Button>
-                  <Button variant={'contained'} color={'warning'} onClick={() => {
-                    deleteId.current = product.id
-                    setOpenDeleteModal(true)
-                  }} size="small">删除</Button>
-                </CardActions>
-              </Card>
+              <Grid2 size={{ md: 12, lg: 8, xl: 8 }}  key={product.id}>
+                <Card>
+                  <CardMedia
+                    sx={{ height: 140 }}
+                    image="https://picsum.photos/200"
+                    title="图片仅供参考"
+                  />
+                  <CardContent sx={{ paddingBottom: 0 }}>
+                    <Typography variant="h5" component="div">{product.name}</Typography>
+                    <Typography variant="body2" gutterBottom sx={{ color: 'text.secondary' }}>{ellipsis(product.description, 50)}</Typography>
+                    <Typography variant={'caption'} gutterBottom sx={{ color: 'text.secondary' }}>
+                      <div>上传时间: {product.uploadTime}</div>
+                      <div>修改时间: {product.modifyTime}</div>
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                      <Stack direction={'row'} spacing={2}>
+                        <span><ShoppingCart fontSize={'inherit'}/>单价: <CurrencyYen fontSize={ 'inherit' }/>{product.price}</span>
+                        <span><Inventory fontSize={'inherit'}/>库存: {product.store}</span>
+                      </Stack>
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button variant={'contained'} onClick={() => {
+                      setCurrentProduct(product)
+                      setOpenDrawer(true)
+                    }} size="small">修改</Button>
+                    <Button variant={'contained'} color={'warning'} onClick={() => {
+                      deleteId.current = product.id
+                      setOpenDeleteModal(true)
+                    }} size="small">删除</Button>
+                  </CardActions>
+                </Card>
+              </Grid2>
             )
           })}
-        </Stack>
+        </Grid2>
       </Paper>
       {/* 分页 */}
       <Paper className={style.pagination}>

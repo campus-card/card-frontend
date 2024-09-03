@@ -1,5 +1,5 @@
-import '@/view/auth/index.scss'
-import { Container } from '@mui/material'
+import style from '@/view/auth/index.module.scss'
+import { Box, Container } from '@mui/material'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { apiRefresh } from '@/api/auth.ts'
@@ -29,10 +29,12 @@ export default function Auth() {
   }, [])
 
   return (
-    <Container className='auth'>
-      <div className='app-title'>校园卡消费系统</div>
-      {/* 二级路由 */}
-      <Outlet />
-    </Container>
+    <Box sx={{ bgcolor: 'background.default' }}>
+      <Container className={style.auth}>
+        <div className={style.appTitle}>校园卡消费系统</div>
+        {/* 二级路由 */}
+        <Outlet />
+      </Container>
+    </Box>
   )
 }

@@ -1,5 +1,7 @@
+@use '@/assets/style/common.module.scss' as *;
+
 .shop {
-  padding-top: 10px;
+  padding-top: $page-padding-top;
 
   .header {
     display: flex;
