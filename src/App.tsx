@@ -1,7 +1,8 @@
-import { createContext, Suspense, useState } from 'react'
+import { createContext, Suspense, useEffect, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from '@/route'
 import { createTheme, ThemeProvider } from '@mui/material'
+import { useAppSelector } from '@/redux/typing.ts'
 
 const darkTheme = createTheme({
   palette: { mode: 'dark' }
@@ -13,6 +14,10 @@ export const ThemeContext = createContext(null)
 
 export default function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const themePref = useAppSelector(state => state.user.themePreference)
+  useEffect(() => {
+    setTheme(themePref)
+  }, [])
 
   return (
     // @ts-ignore

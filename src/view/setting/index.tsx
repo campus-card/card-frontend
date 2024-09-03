@@ -1,21 +1,18 @@
 import style from './index.module.scss'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { ThemeContext } from '@/App.tsx'
 import { Box, Container, Divider, Grid2, Paper, Switch, Typography } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '@/redux/typing.ts'
+import { useAppDispatch } from '@/redux/typing.ts'
 import { setThemePreference } from '@/redux/reducer/user.ts'
 
 export default function Setting() {
   // @ts-ignore
   const { theme, setTheme } = useContext(ThemeContext)
-  const themePref = useAppSelector(state => state.user.themePreference)
   const dispatch = useAppDispatch()
-  useEffect(() => {
-    setTheme(themePref)
-  }, [])
   const switchTheme = () => {
     setTheme((theme: 'light' |'dark') => {
       const newTheme = theme === 'light' ? 'dark' : 'light'
+      // 将主题偏好存入redux
       dispatch(setThemePreference(newTheme))
       return newTheme
     })
