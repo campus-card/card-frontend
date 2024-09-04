@@ -128,7 +128,7 @@ export default function Index() {
         {/* 左侧菜单导航栏
          ClickAwayListener用于实现点击外侧时关闭菜单; Slide为移入的动画组件 */}
         <ClickAwayListener onClickAway={() => isSmallScreen && setOpenMenu(false)}>
-          <Slide direction={'right'} in={openMenu} style={{ position: isSmallScreen ? 'absolute' : 'initial' }}>
+          <Slide direction={'right'} in={openMenu} style={{ position: isSmallScreen ? 'absolute' : 'initial', zIndex: 2 }}>
             <Grid2 size={isSmallScreen ? 12 : 4}>
               <Paper className={style.menuWrapper}>
                 <List subheader={<ListSubheader style={{fontSize: '20px', fontWeight: 'bold'}}>校园卡管理系统</ListSubheader>}>

@@ -20,7 +20,8 @@ export const apiAddProduct = async (name: string, description: string, price: nu
 
 /**
  * 商家获取自己上传的商品列表 <br>
- * order: 1->按照上架时间排序, 2->价格排序, 3->库存排序
+ * order: 1->按照上架时间排序, 2->价格排序, 3->库存排序 <br>
+ * force: 是否强制刷新, 不从dataList中取数据
  */
 export const apiGetProductList = async (page: number, pageSize: number, dataList: Product[], force: boolean = false, isAsc: number = 0, order: number = 1): Promise<Page<Product>> => {
   if (!force) {
@@ -44,7 +45,7 @@ export const apiGetProductList = async (page: number, pageSize: number, dataList
     return res.data
   } else {
     console.warn('获取商品列表失败', res)
-    Toast.error('获取商品列表失败')
+    Toast.error(res.message)
     return { data: [] } as unknown as Page<Product>
   }
 }
