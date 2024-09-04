@@ -28,8 +28,9 @@ export const router = createBrowserRouter([
     children: [
       { path: 'home', Component: lazy(() => import('@/view/home')) },
       { path: 'card', Component: lazy(() => import('@/view/card')) },
+      { path: 'purchase', Component: lazy(() => import('@/view/purchase')) },
       { path: 'shop', Component: lazy(() => import('@/view/shop')) },
-      { path: 'userinfo', Component: lazy(() => import('@/view/userinfo')) },
+      { path: 'userInfo', Component: lazy(() => import('@/view/userInfo')) },
       { path: 'setting', Component: lazy(() => import('@/view/setting')) }
     ]
   }

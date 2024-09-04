@@ -25,7 +25,7 @@ import {
   AccountBox,
   AccountCircle,
   CreditCard,
-  Home,
+  Home, LocalMall,
   LocalShippingOutlined,
   Logout,
   Settings
@@ -33,7 +33,7 @@ import {
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate, useOutlet } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/redux/typing.ts'
-import { logout, setUserinfo } from '@/redux/reducer/user.ts'
+import { logout, setUserInfo } from '@/redux/reducer/user.ts'
 import store from '@/redux'
 import { User, UserRole } from '@/type/User.ts'
 import { apiGetUserInfo } from '@/api/user.ts'
@@ -49,21 +49,26 @@ const menuItems = role === UserRole.Student ? [
   // index为0表示分割线
   { index: 0, key: '我的', label: '我的', icon: null },
   { index: 2, key: '/index/card', label: '校园卡管理', icon: CreditCard },
-  { index: 3, key: '/index/userinfo', label: '用户信息', icon: AccountBox },
-  { index: 4, key: '/index/setting', label: '设置', icon: Settings }
+  { index: 3, key: '/index/purchase', label: '校园卡消费', icon: LocalMall },
+  { index: 4, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
+  { index: 5, key: '/index/setting', label: '设置', icon: Settings }
 ] : role === UserRole.Shop ? [
   { index: 1, key: '/index/home', label: '主页', icon: Home },
   { index: 2, key: '/index/shop', label: '商品管理', icon: LocalShippingOutlined },
-  { index: 3, key: '/index/userinfo', label: '用户信息', icon: AccountBox },
+  { index: 3, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
   { index: 4, key: '/index/setting', label: '设置', icon: Settings }
-] : []
+] : [
+  { index: 1, key: '/index/home', label: '主页', icon: Home },
+  { index: 2, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
+  { index: 3, key: '/index/setting', label: '设置', icon: Settings }
+]
 
 export default function Index() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   // 当前登录的用户信息
-  const userinfo = useAppSelector<User>(state => state.user.userinfo)
+  const userInfo = useAppSelector<User>(state => state.user.userInfo)
 
   // 点击header头像弹出菜单的挂载点
   // useRef只有当泛型参数包含null时, 返回的才是不可修改的RefObject. 否则为可修改的MutableRefObject, 类型不一样
@@ -86,11 +91,11 @@ export default function Index() {
     (async () => {
       const res = await apiGetUserInfo()
       if (res.code === 200) {
-        dispatch(setUserinfo(res.data))
+        dispatch(setUserInfo(res.data))
       } else {
         Toast.error(res.message)
         console.warn('获取用户信息失败', res)
-        dispatch(setUserinfo(Placeholder.User()))
+        dispatch(setUserInfo(Placeholder.User()))
       }
     })()
   }, [])
@@ -186,8 +191,8 @@ export default function Index() {
                 open={open}
                 onClose={() => setOpen(false)}
               >
-                <Container><Paper style={{ fontWeight: 'bolder', textAlign: 'center', fontSize: '22px' }}>{userinfo.username}</Paper></Container>
-                <MenuItem onClick={() => selectItem(3, '/index/userinfo')}>
+                <Container><Paper style={{ fontWeight: 'bolder', textAlign: 'center', fontSize: '22px' }}>{userInfo.username}</Paper></Container>
+                <MenuItem onClick={() => selectItem(3, '/index/userInfo')}>
                   <ListItemIcon><AccountBox fontSize={'small'}/></ListItemIcon>用户信息
                 </MenuItem>
                 <MenuItem onClick={() => dispatch(logout())}>

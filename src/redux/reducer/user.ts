@@ -3,29 +3,37 @@ import { User } from '@/type/User.ts'
 import { createAppSelector } from '@/redux/typing.ts'
 import { LoginData } from '@/type/Api.ts'
 import { router } from '@/route'
+import { Placeholder } from '@/util/placeholder.ts'
+import { CampusCard } from '@/type/Student.ts'
 
 // slice是reducer和action-creator的结合. 便于根据业务流程划分reducer
 const userSlice = createSlice({
+  // slice的名称, 会成为state的key, 访问时使用state.user
   name: 'user',
   initialState: {
-    userinfo: {} as User,
+    userInfo: Placeholder.User(),
     loginData: {} as LoginData,
+    campusCard: Placeholder.CampusCard(),
     themePreference: 'light' as 'light' | 'dark'
   },
   reducers: {
-    setUserinfo: (state, action: PayloadAction<Partial<User>>) => {
+    setUserInfo: (state, action: PayloadAction<Partial<User>>) => {
       // 支持部分更新/删除. 删除时payload对应字段设为undefined
-      state.userinfo = { ...state.userinfo, ...action.payload }
+      state.userInfo = { ...state.userInfo, ...action.payload }
     },
     setLoginData(state, action: PayloadAction<Partial<LoginData>>) {
       state.loginData = { ...state.loginData, ...action.payload }
+    },
+    setCampusCard: (state, action: PayloadAction<Partial<CampusCard>>) => {
+      state.campusCard = { ...state.campusCard, ...action.payload }
     },
     clearLoginData: (state) => {
       state.loginData = {} as LoginData
     },
     logout: (state) => {
+      // 清楚登录信息和用户信息
       state.loginData = {} as LoginData
-      state.userinfo = {} as User
+      state.userInfo = {} as User
       // 登出之后直接刷新
       router.navigate('/auth')
         .then(() => location.reload())
@@ -44,7 +52,7 @@ const userSlice = createSlice({
     // https://www.reduxjs.cn/usage/deriving-data-selectors/#createselector-%E6%A6%82%E8%BF%B0
     roleLabel: createAppSelector(
       // inputSelectors, 可以有多个(数组)
-      state => state.userinfo.role,
+      state => state.userInfo.role,
       // result/outputSelector
       role => {
         switch (role) {
@@ -60,6 +68,10 @@ const userSlice = createSlice({
   }
 })
 
-export const { setUserinfo, setLoginData, clearLoginData, logout, setThemePreference } = userSlice.actions
+export const {
+  setUserInfo, setLoginData, clearLoginData, logout, setThemePreference,
+  setCampusCard
+} = userSlice.actions
+
 export const { token, refreshToken, roleLabel } = userSlice.selectors
 export default userSlice.reducer

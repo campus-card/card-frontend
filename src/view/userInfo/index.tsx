@@ -13,16 +13,17 @@ import {
   Typography
 } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '@/redux/typing.ts'
-import { User, UserRole, UserRoleLabel } from '@/type/User.ts'
+import { User } from '@/type/User.ts'
 import { FormEvent, useState } from 'react'
 import { EditNote } from '@mui/icons-material'
 import Toast from '@/util/Toast.ts'
 import { apiUpdateUserInfo } from '@/api/user.ts'
-import { setUserinfo } from '@/redux/reducer/user.ts'
+import { roleLabel, setUserInfo } from '@/redux/reducer/user.ts'
 
 export default function UserInfo() {
   const dispatch = useAppDispatch()
-  const userinfo = useAppSelector<User>(state => state.user.userinfo)
+  const userInfo = useAppSelector<User>(state => state.user.userInfo)
+  const roleLabelStr = useAppSelector(roleLabel)
 
   const [open, setOpen] = useState<boolean>(false)
   const updateUserInfo = async (e: FormEvent<HTMLFormElement>) => {
@@ -33,7 +34,7 @@ export default function UserInfo() {
       Toast.warning('用户名不能为空')
       return
     }
-    if (data.username === userinfo.username) {
+    if (data.username === userInfo.username) {
       Toast.warning('用户名没有变化')
       return
     }
@@ -48,7 +49,7 @@ export default function UserInfo() {
     const res = await apiUpdateUserInfo(data.username)
     if (res.code === 200) {
       Toast.success('修改成功')
-      dispatch(setUserinfo({ ...userinfo, ...data }))
+      dispatch(setUserInfo({ ...userInfo, ...data }))
       setOpen(false)
     } else {
       Toast.error(res.message)
@@ -67,9 +68,8 @@ export default function UserInfo() {
             </Grid2>
             <Grid2 offset={1} size={13}>
               <Box>
-                <span style={{ marginRight: '10px' }}>{ userinfo.username }</span>
-                {/* @ts-ignore */}
-                <Chip label={UserRoleLabel[UserRole[userinfo.role]]} variant={'outlined'} />
+                <span style={{ marginRight: '10px' }}>{ userInfo.username }</span>
+                <Chip label={roleLabelStr} variant={'outlined'} />
               </Box>
             </Grid2>
           </Grid2>
@@ -79,7 +79,7 @@ export default function UserInfo() {
               <Box><b>注册时间</b></Box>
             </Grid2>
             <Grid2 offset={1} size={13}>
-              <Box>{ userinfo.registerTime }</Box>
+              <Box>{ userInfo.registerTime }</Box>
             </Grid2>
           </Grid2>
           <Divider variant={'middle'} sx={{ mb: '10px' }}/>
