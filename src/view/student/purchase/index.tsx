@@ -34,7 +34,8 @@ export default function Purchase() {
   // 初始化商品列表第一页的数据
   const initListData = () => {
     setCurrentPage(1)
-    apiGetStuProductList(currentPage, pageSize, productListData.current, true)
+    productListData.current = []
+    apiGetStuProductList(1, pageSize, productListData.current, true)
       .then(pageData => {
         setProductList(pageData.data)
         setTotalPage(pageData.pages)
@@ -49,6 +50,9 @@ export default function Purchase() {
       setProductList(pageData.data)
     })()
   }
+
+  // 重置dialog输入信息的按钮ref
+  const resetRef = useRef<HTMLButtonElement>(null)
 
   // 购买商品
   const [currentProduct, setCurrentProduct] = useState<Product>(Placeholder.Product())
@@ -78,6 +82,7 @@ export default function Purchase() {
       }
       initListData()
       setOpenPurchase(false)
+      resetRef.current?.click()
     } else {
       console.warn('购买失败', res)
       Toast.error(res.message)
@@ -147,7 +152,7 @@ export default function Purchase() {
             name={'count'}
             label={'购买数量'}
             type={'number'}
-            defaultValue={0}
+            defaultValue={1}
             slotProps={{ input: { endAdornment: <InputAdornment position={'end'}>/ {currentProduct.store}<ViewModule/></InputAdornment>} }}
             fullWidth
           />
@@ -161,7 +166,11 @@ export default function Purchase() {
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color={'secondary'} onClick={() => setOpenPurchase(false)}>取消</Button>
+          <Button variant={'text'} type={'reset'} ref={resetRef}>重置</Button>
+          <Button variant="contained" color={'secondary'} onClick={() => {
+            setOpenPurchase(false)
+            resetRef.current?.click()
+          }}>取消</Button>
           <Button variant="contained" type={'submit'}>确认购买</Button>
         </DialogActions>
       </Dialog>

@@ -18,7 +18,7 @@ export default function Auth() {
       const res = await apiRefresh(refresh)
       if (res.code === 200) {
         dispatch(setLoginData(res.data))
-        Toast.success('自动登录')
+        Toast.success('[自动登录] 欢迎回来~')
         navigate('/index/home')
       } else {
         // 自动登录失败, 清除登录信息

@@ -1,4 +1,4 @@
-import { Product } from '@/type/Product.ts'
+import { Product, PurchaseRecord } from '@/type/Product.ts'
 import apiRequest from '@/util/api-request.ts'
 import { DataResponse } from '@/type/Api.ts'
 import { Page } from '@/api/common.ts'
@@ -71,4 +71,31 @@ export const apiDeleteProduct = async (productId: number): Promise<DataResponse>
     }
   })
   return data
+}
+
+/**
+ * 商家获取自己的销售记录
+ */
+export const apiGetSaleRecord = async (page: number, pageSize: number, dataList: PurchaseRecord[], force: boolean = false): Promise<Page<PurchaseRecord>> => {
+  if (!force) {
+    const targetPage = dataList.slice((page - 1) * pageSize, page * pageSize)
+    if (targetPage.filter(item => item).length === pageSize) {
+      return { data: targetPage } as Page<PurchaseRecord>
+    }
+  }
+  const { data } = await apiRequest.get('/shop/getSalesRecord', {
+    params: {
+      page,
+      pageSize
+    }
+  })
+  const res = data as DataResponse<Page<PurchaseRecord>>
+  if (res.code === 200) {
+    spliceWithPlaceholder(dataList, (page - 1) * pageSize, pageSize, ...res.data.data)
+    return res.data
+  } else {
+    console.warn('获取销售记录失败', res)
+    Toast.error(res.message)
+    return { data: [] } as unknown as Page<PurchaseRecord>
+  }
 }

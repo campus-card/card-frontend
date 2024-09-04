@@ -81,12 +81,26 @@ export const apiPurchase = async (productId: number, count: number, password: st
 /**
  * 学生查询校园卡消费记录
  */
-export const apiGetPurchaseRecord = async (page: number, pageSize: number): Promise<DataResponse<PurchaseRecord[]>> => {
+export const apiGetPurchaseRecord = async (page: number, pageSize: number, dataList: PurchaseRecord[], force: boolean = false): Promise<Page<PurchaseRecord>> => {
+  if (!force) {
+    const targetPage = dataList.slice((page - 1) * pageSize, page * pageSize)
+    if (targetPage.filter(item => item).length === pageSize) {
+      return { data: targetPage } as Page<PurchaseRecord>
+    }
+  }
   const { data } = await apiRequest.get('/student/getPurchaseRecord', {
     params: {
       page,
       pageSize
     }
   })
-  return data as DataResponse<PurchaseRecord[]>
+  const res = data as DataResponse<Page<PurchaseRecord>>
+  if (res.code === 200) {
+    spliceWithPlaceholder(dataList, (page - 1) * pageSize, pageSize, ...res.data.data)
+    return res.data
+  } else {
+    console.warn('获取消费记录失败', res)
+    Toast.error(res.message)
+    return { data: [] } as unknown as Page<PurchaseRecord>
+  }
 }

@@ -30,7 +30,8 @@ export default function Shop() {
   // 初始化商品列表第一页的数据
   const initListData = () => {
     setCurrentPage(1)
-    apiGetProductList(currentPage, pageSize, productListData.current, true)
+    productListData.current = []
+    apiGetProductList(1, pageSize, productListData.current, true)
       .then(pageData => {
         setProductList(pageData.data)
         setTotalPage(pageData.pages)

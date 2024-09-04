@@ -6,7 +6,6 @@ import { lazy } from 'react'
 * 使用<RouterProvider router={router} />作为路由出口, 而不是useRoutes
 * 导出的router对象可以在组件之外使用, 用于路由跳转
 *  */
-// todo: keep-alive效果. 目前react不支持, 计划引入react-activation库
 export const router = createBrowserRouter([
   /* 重定向 */
   { path: '/', element: <Navigate to='/auth/login'/> },
@@ -27,11 +26,13 @@ export const router = createBrowserRouter([
     Component: lazy(() => import('@/view/index')),
     children: [
       { path: 'home', Component: lazy(() => import('@/view/home')) },
-      { path: 'card', Component: lazy(() => import('@/view/card')) },
-      { path: 'purchase', Component: lazy(() => import('@/view/purchase')) },
-      { path: 'shop', Component: lazy(() => import('@/view/shop')) },
+      { path: 'card', Component: lazy(() => import('@/view/student/card')) },
+      { path: 'purchase', Component: lazy(() => import('@/view/student/purchase')) },
+      { path: 'purchase-record', Component: lazy(() => import('@/view/student/purchase-record')) },
+      { path: 'product', Component: lazy(() => import('@/view/shop/product')) },
+      { path: 'sale-record', Component: lazy(() => import('@/view/shop/sale-record')) },
       { path: 'userInfo', Component: lazy(() => import('@/view/userInfo')) },
-      { path: 'setting', Component: lazy(() => import('@/view/setting')) }
+      { path: 'setting', Component: lazy(() => import('@/view/setting')) },
     ]
   }
 ])
