@@ -32,7 +32,7 @@ export default function Purchase() {
   const pageSize = 9
 
   // 初始化商品列表第一页的数据
-  const initListData = () => {
+  useEffect(() => {
     setCurrentPage(1)
     productListData.current = []
     apiGetStuProductList(1, pageSize, productListData.current, true)
@@ -41,8 +41,7 @@ export default function Purchase() {
         setTotalPage(pageData.pages)
         totalNum.current = pageData.total
       })
-  }
-  useEffect(initListData, [])
+  }, [])
   const changePage = (_e: ChangeEvent<unknown>, page: number) => {
     (async () => {
       setCurrentPage(page)
@@ -80,7 +79,10 @@ export default function Purchase() {
         Toast.error(res.message)
         console.warn('获取校园卡信息失败', res)
       }
-      initListData()
+      // 对应商品的数量减少
+      const index = productList.findIndex(product => product.id === currentProduct.id)
+      productList[index].store -= count
+      setProductList([...productList])
       setOpenPurchase(false)
       resetRef.current?.click()
     } else {
