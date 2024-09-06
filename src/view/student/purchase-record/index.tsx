@@ -71,7 +71,7 @@ export default function PurchaseRecord() {
                 <Avatar><MonetizationOn/></Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={bill.productName}
+                primary={bill.productName || '商品已下架'}
                 secondary={<Typography>商家: {bill.shopName}</Typography>}
               />
             </ListItem>

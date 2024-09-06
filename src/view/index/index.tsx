@@ -49,8 +49,8 @@ const menuItems = role === UserRole.Student ? [
   // index为0表示分割线
   { index: 0, key: '我的', label: '我的', icon: null },
   { index: 2, key: '/index/card', label: '校园卡管理', icon: CreditCard },
-  { index: 3, key: '/index/purchase', label: '校园卡消费', icon: LocalMall },
-  { index: 4, key: '/index/purchase-record', label: '消费账单', icon: Receipt },
+  { index: 3, key: '/index/purchase-record', label: '消费账单', icon: Receipt },
+  { index: 4, key: '/index/purchase', label: '校园卡消费', icon: LocalMall },
   { index: 5, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
   { index: 6, key: '/index/setting', label: '设置', icon: Settings }
 ] : role === UserRole.Shop ? [

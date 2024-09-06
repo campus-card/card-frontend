@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import store from '@/redux'
 
-export const baseURL: string = 'http://localhost:8192/api'
+export const baseURL: string = 'http://localhost:8192/campusCard'
 
 const apiRequest: AxiosInstance = axios.create({
   baseURL,

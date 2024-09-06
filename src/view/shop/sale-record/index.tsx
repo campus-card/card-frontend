@@ -71,7 +71,7 @@ export default function SaleRecord() {
                 <Avatar><MonetizationOn/></Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={record.productName}
+                primary={record.productName || '商品已下架'}
                 secondary={<Typography>消费人: {record.studentName}</Typography>}
               />
             </ListItem>
