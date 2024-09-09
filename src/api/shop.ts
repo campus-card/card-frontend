@@ -8,12 +8,13 @@ import { spliceWithPlaceholder } from '@/util/common.ts'
 /**
  * 商家上传商品
  */
-export const apiAddProduct = async (name: string, description: string, price: number, store: number): Promise<DataResponse> => {
+export const apiAddProduct = async (name: string, description: string, price: number, store: number, cover?: File): Promise<DataResponse> => {
   const { data } = await apiRequest.postForm('/shop/addProduct', {
     name,
     description,
     price,
-    store
+    store,
+    cover
   })
   return data
 }
@@ -53,7 +54,7 @@ export const apiGetProductList = async (page: number, pageSize: number, dataList
 /**
  * 商家修改商品信息, 只更新修改了的字段
  */
-export const apiModifyProduct = async (productId: number, modifiedProps: Partial<Product>): Promise<DataResponse> => {
+export const apiModifyProduct = async (productId: number, modifiedProps: any): Promise<DataResponse<Product>> => {
   const { data } = await apiRequest.patchForm('/shop/modifyProduct', {
     id: productId,
     ...modifiedProps

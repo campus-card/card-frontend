@@ -5,10 +5,18 @@ import {
   CardActions,
   CardContent,
   CardMedia,
-  Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  Grid2, InputAdornment, Pagination,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid2,
+  InputAdornment,
+  Pagination,
   Paper,
-  Stack, TextField,
+  Stack,
+  TextField,
   Typography
 } from '@mui/material'
 import { ellipsis } from '@/util/common.ts'
@@ -24,7 +32,7 @@ import { setCampusCard } from '@/redux/reducer/user.ts'
 export default function Purchase() {
   const dispatch = useAppDispatch()
 
-  const productListData= useRef<Product[]>([])
+  const productListData = useRef<Product[]>([])
   const [productList, setProductList] = useState<Product[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [totalPage, setTotalPage] = useState<number>(1)
@@ -58,7 +66,10 @@ export default function Purchase() {
   const [openPurchase, setOpenPurchase] = useState<boolean>(false)
   const purchase = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const purchaseForm = Object.fromEntries(new FormData(e.currentTarget).entries()) as { password: string, count: string }
+    const purchaseForm = Object.fromEntries(new FormData(e.currentTarget).entries()) as {
+      password: string,
+      count: string
+    }
     if (!/^\d{6}$/.test(purchaseForm.password)) {
       Toast.warning('支付密码必须为6位数字')
       return
@@ -103,22 +114,24 @@ export default function Purchase() {
         >
           {productList.map(product => {
             return (
-              <Grid2 size={{ md: 12, lg: 8, xl: 8 }}  key={product.id}>
+              <Grid2 size={{md: 12, lg: 8, xl: 8}} key={product.id}>
                 <Card>
                   <CardMedia
-                    sx={{ height: 140 }}
-                    image="https://picsum.photos/200"
+                    sx={{height: 140}}
+                    image={product.coverUrl}
                     title="图片仅供参考"
                   />
-                  <CardContent sx={{ paddingBottom: 0 }}>
+                  <CardContent sx={{paddingBottom: 0}}>
                     <Typography variant="h5" component="div">{product.name}</Typography>
-                    <Typography variant="body2" gutterBottom sx={{ color: 'text.secondary' }}>{ellipsis(product.description, 50)}</Typography>
-                    <Typography variant={'caption'} gutterBottom sx={{ color: 'text.secondary' }}>
+                    <Typography variant="body2" gutterBottom
+                                sx={{color: 'text.secondary'}}>{ellipsis(product.description, 50)}</Typography>
+                    <Typography variant={'caption'} gutterBottom sx={{color: 'text.secondary'}}>
                       <div>上架时间: {product.uploadTime}</div>
                     </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                    <Typography variant="caption" sx={{color: 'text.secondary'}}>
                       <Stack direction={'row'} spacing={2}>
-                        <span><ShoppingCart fontSize={'inherit'}/>价格: <CurrencyYen fontSize={ 'inherit' }/>{product.price}</span>
+                        <span><ShoppingCart fontSize={'inherit'}/>价格: <CurrencyYen
+                          fontSize={'inherit'}/>{product.price}</span>
                         <span><Inventory fontSize={'inherit'}/>库存: {product.store}</span>
                       </Stack>
                     </Typography>
@@ -137,14 +150,14 @@ export default function Purchase() {
       </Paper>
       {/* 分页 */}
       <Paper className={style.pagination}>
-        <Pagination onChange={changePage} page={currentPage} count={totalPage} color="primary" />
+        <Pagination onChange={changePage} page={currentPage} count={totalPage} color="primary"/>
       </Paper>
       {/* 开通校园卡的dialog */}
       <Dialog
         open={openPurchase}
         onClose={() => setOpenPurchase(false)}
         keepMounted
-        PaperProps={{ component: 'form', onSubmit: purchase }}
+        PaperProps={{component: 'form', onSubmit: purchase}}
       >
         <DialogTitle>购买商品: {currentProduct.name}</DialogTitle>
         <DialogContent>
@@ -155,7 +168,11 @@ export default function Purchase() {
             label={'购买数量'}
             type={'number'}
             defaultValue={1}
-            slotProps={{ input: { endAdornment: <InputAdornment position={'end'}>/ {currentProduct.store}<ViewModule/></InputAdornment>} }}
+            slotProps={{
+              input: {
+                endAdornment: <InputAdornment position={'end'}>/ {currentProduct.store}<ViewModule/></InputAdornment>
+              }
+            }}
             fullWidth
           />
           <TextField
@@ -163,7 +180,7 @@ export default function Purchase() {
             variant={'standard'}
             name={'password'}
             label={'支付密码'}
-            slotProps={{ input: { endAdornment: <InputAdornment position={'end'}><Security/></InputAdornment>} }}
+            slotProps={{input: {endAdornment: <InputAdornment position={'end'}><Security/></InputAdornment>}}}
             fullWidth
           />
         </DialogContent>

@@ -55,7 +55,7 @@ export default function SaleRecord() {
               alignItems={'flex-start'}
               secondaryAction={
                 <ListItemText
-                  primary={<Typography sx={{ textAlign: 'right' }}>消费金额: <Chip color={'success'} label={`￥${record.amount}`} component="span"/></Typography>}
+                  primary={<Typography sx={{ textAlign: 'right' }}>交易金额: <Chip color={'success'} label={`￥${record.amount}`} component="span"/></Typography>}
                   secondary={
                     <Stack component="span" direction={'row'} alignItems={'center'} spacing={1} sx={{ mt: '5px' }}>
                       <Box component="span">购买数量: <Chip label={record.count} component="span"/></Box>

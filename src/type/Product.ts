@@ -6,6 +6,8 @@ export type Product = {
   shopId: number,
   name: string,
   description: string,
+  // 封面图片url
+  coverUrl: string,
   price: number,
   store: number,
   // 总销售数量
@@ -27,9 +29,9 @@ export type PurchaseRecord = {
   // 花费金额
   amount: number,
   // 购买数量
-  count: number
+  count: number,
   // 购买后剩余库存
-  store: number
+  store: number,
   // 购买时间
   purchaseTime: string,
   productName: string,
