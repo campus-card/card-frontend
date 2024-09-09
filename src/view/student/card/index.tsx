@@ -44,11 +44,6 @@ export default function Card() {
 
   const [numberInput, setNumberInput] = useState<string>('')
   const recharge = async () => {
-    // 检测是否为数字
-    if (!/^\d+(\.\d+)?$/.test(numberInput)) {
-      Toast.warning('请输入正确的金额数字')
-      return
-    }
     if (!/^\d{1,10}(\.\d{0,2})?$/.test(numberInput)) {
       Toast.warning('充值金额最多有2位小数, 整数部分最多10位')
       return
@@ -180,6 +175,7 @@ export default function Card() {
           <DialogContentText>请输入充值金额</DialogContentText>
           <TextField
             value={numberInput}
+            type={'number'}
             onChange={e => setNumberInput(e.target.value)}
             name="amount"
             fullWidth

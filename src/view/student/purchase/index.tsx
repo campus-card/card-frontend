@@ -28,6 +28,7 @@ import { apiGetCardInfo, apiGetStuProductList, apiPurchase } from '@/api/student
 import Toast from '@/util/Toast.ts'
 import { useAppDispatch } from '@/redux/typing.ts'
 import { setCampusCard } from '@/redux/reducer/user.ts'
+import EmptyCover from '@/assets/svg/empty-image.svg'
 
 export default function Purchase() {
   const dispatch = useAppDispatch()
@@ -118,7 +119,7 @@ export default function Purchase() {
                 <Card>
                   <CardMedia
                     sx={{height: 140}}
-                    image={product.coverUrl}
+                    image={product.coverUrl || EmptyCover}
                     title="图片仅供参考"
                   />
                   <CardContent sx={{paddingBottom: 0}}>

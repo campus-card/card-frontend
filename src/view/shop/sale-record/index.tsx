@@ -76,7 +76,7 @@ export default function SaleRecord() {
               />
             </ListItem>
           ))}
-          {recordList.length === 0 && <ListItem><ListItemText secondary={'暂无数据...'}/></ListItem>}
+          {recordList.length === 0 && <ListItem><ListItemText secondary={'暂无销售记录...'}/></ListItem>}
         </List>
       </Card>
       <Paper className={style.pagination}>

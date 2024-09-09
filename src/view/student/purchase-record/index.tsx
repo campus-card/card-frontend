@@ -12,13 +12,13 @@ import {
   Paper,
   Stack, Typography
 } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { PurchaseRecord } from '@/type/Product.ts'
 import { MonetizationOn } from '@mui/icons-material'
 import { apiGetPurchaseRecord } from '@/api/student.ts'
+import { useEffectOnActive } from 'keepalive-for-react'
 
 export default function PurchaseRecord() {
-
   const billListData = useRef<PurchaseRecord[]>([])
   const [billList, setBillList] = useState<PurchaseRecord[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -26,7 +26,8 @@ export default function PurchaseRecord() {
   const totalNum = useRef<number>(0)
   const pageSize = 9
   // 初始化销售记录第一页的数据
-  useEffect(() => {
+  useEffectOnActive(active => {
+    if (!active) return
     setCurrentPage(1)
     apiGetPurchaseRecord(1, pageSize, billListData.current)
       .then(recordPage => {
@@ -34,7 +35,8 @@ export default function PurchaseRecord() {
         setTotalPage(recordPage.pages)
         totalNum.current = recordPage.total
       })
-  }, [])
+  }, false, [])
+
   const changePage = (_e: unknown, page: number) => {
     setCurrentPage(page)
     apiGetPurchaseRecord(page, pageSize, billListData.current)
@@ -76,7 +78,7 @@ export default function PurchaseRecord() {
               />
             </ListItem>
           ))}
-          {billList.length === 0 && <ListItem><ListItemText secondary={'暂无数据...'}/></ListItem>}
+          {billList.length === 0 && <ListItem><ListItemText secondary={'暂无消费记录...'}/></ListItem>}
         </List>
       </Card>
       <Paper className={style.pagination}>

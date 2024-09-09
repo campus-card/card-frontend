@@ -15,7 +15,7 @@ import {
   Grid2,
   IconButton,
   ImageList,
-  ImageListItem,
+  ImageListItem, ListItem, ListItemText,
   Pagination,
   Paper,
   Stack,
@@ -105,7 +105,7 @@ export default function Shop() {
           container
           spacing={2}
           columns={24}
-          justifyContent={'center'}
+          justifyContent={'flex-start'}
         >
           {productList.map(product => {
             return (
@@ -146,6 +146,7 @@ export default function Shop() {
               </Grid2>
             )
           })}
+          {productList.length === 0 && <ListItem><ListItemText secondary={'暂未上架商品...'}/></ListItem>}
         </Grid2>
       </Paper>
       {/* 分页 */}
