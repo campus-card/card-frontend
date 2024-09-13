@@ -241,16 +241,20 @@ const AddProduct = ({open, setOpen, refreshList}: {
           上传封面
           <input ref={coverInputRef} type="file" name="cover" onChange={preview} hidden/>
         </Button>
-        {previewUrl && <Tooltip title="删除图片" arrow placement="right">
-          <IconButton onClick={deletePreview} size="large">
-            <Delete/>
-          </IconButton>
-        </Tooltip>}
-        {previewUrl && <ImageList>
-          <ImageListItem>
-            <img src={previewUrl} alt="封面预览" style={{width: '100%', height: '100%'}}/>
-          </ImageListItem>
-        </ImageList>}
+        {previewUrl && (
+          <Tooltip title="删除图片" arrow placement="right">
+            <IconButton onClick={deletePreview} size="large">
+              <Delete/>
+            </IconButton>
+          </Tooltip>
+        )}
+        {previewUrl && (
+          <ImageList>
+            <ImageListItem>
+              <img src={previewUrl} alt="封面预览" style={{width: '100%', height: '100%'}}/>
+            </ImageListItem>
+          </ImageList>
+        )}
         <TextField fullWidth name="name" label="商品名称" variant="standard"/>
         <TextField fullWidth name="description" label="商品介绍" variant="standard"/>
         {/* note: html元素的input[type="number"]默认限制只能输入整数, 原因是其步长step属性默认为1. 改为小数即可 */}
