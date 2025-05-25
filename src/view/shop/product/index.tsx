@@ -76,8 +76,8 @@ export default function Shop() {
     const res = await apiDeleteProduct(id)
     if (res.code === 200) {
       Toast.warning('已删除商品')
-      // 将数据列表中的对应数据删除
-      productListData.current = productListData.current.filter(item => item.id !== id)
+      // 将数据列表中的对应数据删除. 列表中可能有undefined, 所以还要判断是否为undefined
+      productListData.current = productListData.current.filter(item => item === undefined || item.id !== id)
       totalNum.current -= 1
       // 重新获取当前页的数据
       const pageData = await apiGetProductList(currentPage, pageSize, productListData.current)
