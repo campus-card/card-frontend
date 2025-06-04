@@ -10,6 +10,7 @@ const darkTheme = createTheme({
 const lightTheme = createTheme({
   palette: { mode: 'light' }
 })
+// 主题颜色的上下文对象, 包含主体颜色的state及其setter, 在子组件中使用
 export const ThemeContext = createContext(null)
 
 export default function App() {
@@ -24,7 +25,9 @@ export default function App() {
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
         <Suspense>
-          <RouterProvider router={router} />
+          {/* 定义future属性对象, 关闭react router v7的警告 */}
+          <RouterProvider router={router}
+                          future={{ v7_startTransition: true }} />
         </Suspense>
       </ThemeProvider>
     </ThemeContext.Provider>

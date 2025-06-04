@@ -33,6 +33,7 @@ export const router = createBrowserRouter([
       { path: 'sale-record', Component: lazy(() => import('@/view/shop/sale-record')) },
       { path: 'userInfo', Component: lazy(() => import('@/view/userInfo')) },
       { path: 'setting', Component: lazy(() => import('@/view/setting')) },
+      { path: 'image-share', Component: lazy(() => import('@/view/imageShare')) },
     ]
   }
 ])

@@ -27,7 +27,7 @@ import {
   CreditCard,
   Home, LocalMall,
   LocalShippingOutlined,
-  Logout, Receipt, ReceiptLong,
+  Logout, PhotoLibrary, Receipt, ReceiptLong,
   Settings
 } from '@mui/icons-material'
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
@@ -51,14 +51,16 @@ const menuItems = role === UserRole.Student ? [
   { index: 2, key: '/index/card', label: '校园卡管理', icon: CreditCard },
   { index: 3, key: '/index/purchase-record', label: '消费账单', icon: Receipt },
   { index: 4, key: '/index/purchase', label: '校园卡消费', icon: LocalMall },
-  { index: 5, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
-  { index: 6, key: '/index/setting', label: '设置', icon: Settings }
+  { index: 5, key: '/index/image-share', label: '图片心情墙', icon: PhotoLibrary },
+  { index: 6, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
+  { index: 7, key: '/index/setting', label: '设置', icon: Settings }
 ] : role === UserRole.Shop ? [
   { index: 1, key: '/index/home', label: '主页', icon: Home },
   { index: 2, key: '/index/product', label: '商品管理', icon: LocalShippingOutlined },
   { index: 3, key: '/index/sale-record', label: '销售记录', icon: ReceiptLong },
-  { index: 4, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
-  { index: 5, key: '/index/setting', label: '设置', icon: Settings }
+  { index: 4, key: '/index/image-share', label: '图片心情墙', icon: PhotoLibrary },
+  { index: 5, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
+  { index: 6, key: '/index/setting', label: '设置', icon: Settings }
 ] : role === UserRole.Admin ? [
   { index: 1, key: '/index/home', label: '主页', icon: Home },
   { index: 2, key: '/index/userInfo', label: '用户信息', icon: AccountBox },
@@ -130,7 +132,8 @@ export default function Index() {
         {/* 左侧菜单导航栏
          ClickAwayListener用于实现点击外侧时关闭菜单; Slide为移入的动画组件 */}
         <ClickAwayListener onClickAway={() => isSmallScreen && setOpenMenu(false)}>
-          <Slide direction={'right'} in={openMenu} style={{ position: isSmallScreen ? 'absolute' : 'initial', zIndex: 2 }}>
+          <Slide direction={'right'} in={openMenu} style={{ position: (isSmallScreen || !(!isSmallScreen && openMenu)) ? 'absolute' : 'initial', zIndex: 2 }}>
+            {/* 左侧导航菜单 */}
             <Grid2 size={isSmallScreen ? 12 : 4}>
               <Paper className={style.menuWrapper}>
                 <List subheader={<ListSubheader style={{fontSize: '20px', fontWeight: 'bold'}}>校园卡管理系统</ListSubheader>}>
@@ -157,7 +160,7 @@ export default function Index() {
           </Slide>
         </ClickAwayListener>
         {/* 右侧内容 */}
-        <Grid2 size={isSmallScreen ? 24 : 20}>
+        <Grid2 size={(isSmallScreen || !(!isSmallScreen && openMenu)) ? 24 : 20}>
           {/* 右侧顶部header */}
           <AppBar className={style.header}>
             <Toolbar>
@@ -166,7 +169,7 @@ export default function Index() {
                 edge="start"
                 color="inherit"
                 aria-label="menu"
-                style={{marginRight: '10px', display: isSmallScreen ? 'initial' : 'none'}}
+                style={{marginRight: '10px'}}
                 onClick={(event) => {
                   // 阻止事件冒泡, 防止触发ClickAwayListener的关闭菜单事件, 一打开就关掉了..
                   event.stopPropagation()

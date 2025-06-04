@@ -12,7 +12,7 @@ import {
   DialogContentText,
   DialogTitle,
   Grid2,
-  InputAdornment,
+  InputAdornment, ListItem, ListItemText,
   Pagination,
   Paper,
   Stack,
@@ -147,18 +147,19 @@ export default function Purchase() {
               </Grid2>
             )
           })}
+          {productList.length === 0 && <ListItem><ListItemText secondary={'暂未上架商品...'}/></ListItem>}
         </Grid2>
       </Paper>
       {/* 分页 */}
       <Paper className={style.pagination}>
         <Pagination onChange={changePage} page={currentPage} count={totalPage} color="primary"/>
       </Paper>
-      {/* 开通校园卡的dialog */}
+      {/* 购买商品的dialog */}
       <Dialog
         open={openPurchase}
         onClose={() => setOpenPurchase(false)}
         keepMounted
-        PaperProps={{component: 'form', onSubmit: purchase}}
+        slotProps={{ paper: {component: 'form', onSubmit: purchase} }}
       >
         <DialogTitle>购买商品: {currentProduct.name}</DialogTitle>
         <DialogContent>
